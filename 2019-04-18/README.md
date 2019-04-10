@@ -444,7 +444,8 @@ The workshop is composed of three sections:
 
         Should return something like
 
-        ```{"result":"dc6089a4bea1e0797e9039bfcb31d41311956c1b0cdd780bbc1764c04558aba6","status":200}
+        ```
+        {"result":"dc6089a4bea1e0797e9039bfcb31d41311956c1b0cdd780bbc1764c04558aba6","status":200}
         ```
 
         Check whether the ELA got transferred successfully
