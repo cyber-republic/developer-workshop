@@ -500,7 +500,7 @@ The workshop is composed of three sections:
 
         As you can see, we now have around 50 ELA that was transferred to our token sidechain address
 
-## Excercises
+## Exercises
 
 1. Transfer 10 ELA from main chain to DID sidechain using elastos/Elastos.ELA.Client/ela-cli
 2. Check the result of the transaction hash you got from #1 via Wallet.Service API
