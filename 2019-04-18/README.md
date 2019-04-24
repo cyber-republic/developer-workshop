@@ -5,6 +5,7 @@ To go through this, you will need the following:
 1. You are using a Mac/Linux 
 2. You have installed docker and docker-compose
 3. You have installed Go
+4. You have checked out https://github.com/cyber-republic/elastos-privnet/ and are on tag v0.2
 
 ## Contents
 
@@ -71,7 +72,7 @@ The workshop is composed of three sections:
 
     Foundation Address - Main chain:
     ```
-    $ curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"ENqDYUYURsHpp1wQ8LBdTLba4JhEvSDXEw"}}' http://localhost:10336 | jq .
+    curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"ENqDYUYURsHpp1wQ8LBdTLba4JhEvSDXEw"}}' http://localhost:10336 | jq .
     ```
 
     Should return
@@ -86,7 +87,7 @@ The workshop is composed of three sections:
 
     Pre-loaded Main chain Address 1:
     ```
-    $ curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"EPqoMcoHxWMJcV3pCAsGsjkoTdi6DBnKqr"}}' http://localhost:10336 
+    curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"EPqoMcoHxWMJcV3pCAsGsjkoTdi6DBnKqr"}}' http://localhost:10336 
     ```
 
     Should return
@@ -101,7 +102,7 @@ The workshop is composed of three sections:
 
     Pre-loaded Main chain Address 2:
     ```
-    $ curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"EZzfPQYxAKPR9zSPAG161WsmnucwVqzcLY"}}' http://localhost:10336 
+    curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"EZzfPQYxAKPR9zSPAG161WsmnucwVqzcLY"}}' http://localhost:10336 
     ```
 
     Should return
@@ -116,7 +117,7 @@ The workshop is composed of three sections:
 
     Pre-loaded DID Sidechain Address:
     ```
-    $ curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"EKsSQae7goc5oGGxwvgbUxkMsiQhC9ZfJ3"}}' http://localhost:10606 
+    curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"EKsSQae7goc5oGGxwvgbUxkMsiQhC9ZfJ3"}}' http://localhost:10606 
     ```
 
     Should return
@@ -131,7 +132,7 @@ The workshop is composed of three sections:
 
     Pre-loaded Token Sidechain Address:
     ```
-    $ curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"EUscMawPCr8uFxKDtVxaq93Wbjm1DdtzeW"}}' http://localhost:10616
+    curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"EUscMawPCr8uFxKDtVxaq93Wbjm1DdtzeW"}}' http://localhost:10616
     ```
 
     Should return
@@ -364,11 +365,11 @@ The workshop is composed of three sections:
     - Build the ela-cli client
 
         ```
-        $ cd Elastos.ELA.Client/
-        $ git checkout dev
-        $ rm -rf vendor glide.lock
-        $ glide cc && glide update && glide install
-        $ make
+        cd Elastos.ELA.Client/
+        git checkout dev
+        rm -rf vendor glide.lock
+        glide cc && glide update && glide install
+        make
         ```
 
     - Configure ela-cli config file
@@ -387,7 +388,7 @@ The workshop is composed of three sections:
         You can get genesis block hash for token sidechain doing the following:
 
         ```
-        $ curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getblockhash","params":{"height":1}}' http://localhost:10616
+        $ curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getblockhash","params":{"height":0}}' http://localhost:10616
         ```
 
         Should return
