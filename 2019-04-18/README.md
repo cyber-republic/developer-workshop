@@ -72,7 +72,7 @@ The workshop is composed of three sections:
 
     Foundation Address - Main chain:
     ```
-    curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"ENqDYUYURsHpp1wQ8LBdTLba4JhEvSDXEw"}}' http://localhost:10336 | jq .
+    curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"ENqDYUYURsHpp1wQ8LBdTLba4JhEvSDXEw"}}' http://localhost:10336
     ```
 
     Should return
@@ -445,7 +445,8 @@ The workshop is composed of three sections:
 
         Should return something like
 
-        ```{"result":"dc6089a4bea1e0797e9039bfcb31d41311956c1b0cdd780bbc1764c04558aba6","status":200}
+        ```
+        {"result":"dc6089a4bea1e0797e9039bfcb31d41311956c1b0cdd780bbc1764c04558aba6","status":200}
         ```
 
         Check whether the ELA got transferred successfully
@@ -500,7 +501,7 @@ The workshop is composed of three sections:
 
         As you can see, we now have around 50 ELA that was transferred to our token sidechain address
 
-## Excercises
+## Exercises
 
 1. Transfer 10 ELA from main chain to DID sidechain using elastos/Elastos.ELA.Client/ela-cli
 2. Check the result of the transaction hash you got from #1 via Wallet.Service API
