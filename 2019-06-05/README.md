@@ -409,7 +409,18 @@ This is the node public key you will want to update to from your elastos wallet 
   sudo dpkg -i elastos-carrier-bootstrap-5.2.2da37f-linux-x86_64-Debug.deb
   ```
 
-4. Check the status of carrier bootstrap node
+3. Make changes to `/etc/elastos/bootstrapd.conf`
+- Update bootstrap nodes list under the section "bootstrap_nodes" if you need to(so you can connect to elastos carrier nodes)
+- Set external IP to turn server explicitly: Some Linux VPS servers, for example, servers from AWS, can't fetch public IP address directly by itself, so you have manually update the public IP address of item external_ip under the section "turn"
+- As an example, you can look at [https://github.com/cyber-republic/supernode-setup/blob/master/docker/carrier/bootstrapd.conf](https://github.com/cyber-republic/supernode-setup/blob/master/docker/carrier/bootstrapd.conf)
+
+4. Restart carrier bootstrap node
+
+  ```
+  systemctl restart ela-bootstrapd
+  ```
+
+5. Check the status of carrier bootstrap node
 
   ```
   systemctl status ela-bootstrapd
