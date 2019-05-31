@@ -42,7 +42,7 @@ To go through this, you will need the following:
 3. Verify the DID Sidechain is running by checking the pre-loaded wallet:
 
    ```
-   curl http://localhost:30112/api/v1/asset/balances/EKsSQae7goc5oGGxwvgbUxkMsiQhC9ZfJ3
+   curl http://localhost:30111/api/v1/asset/balances/EKsSQae7goc5oGGxwvgbUxkMsiQhC9ZfJ3
    ```
 
    You should see 100,000 ELA in the DID Sidechain wallet pre-loaded:
