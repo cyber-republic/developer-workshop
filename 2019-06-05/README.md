@@ -653,5 +653,6 @@ Go to your Elastos Wallet, open up your Supernode Edit Page and then enter the a
   kill -9 $(ps aux | grep "./did" | grep -v grep | cut -d' ' -f2);
   kill -9 $(ps aux | grep "./token" | grep -v grep | cut -d' ' -f2);
   sudo systemctl stop ela-bootstrapd;
+  rm -rf ~/node/ela ~/node/did ~/node/token ~/node/carrier;
   cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain
   ```
