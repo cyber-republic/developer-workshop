@@ -5,7 +5,7 @@ To go through this, you will need the following:
 1. You are using a Mac/Linux
 2. You have installed docker and docker-compose
 3. You have installed Go
-4. You have checked out https://github.com/cyber-republic/elastos-privnet/ and are on tag v0.3
+4. You have checked out https://github.com/cyber-republic/elastos-privnet/tree/v0.3 and are on tag v0.3
 5. Catch up on First Developer Workshop on how to run an elastos private net on your local machine if you haven't. Visit [Elastos Developer Workshop #1: Running Private Net](https://www.youtube.com/watch?v=0Mn9pz2UORo) for more info
 
 ## Contents
@@ -24,6 +24,9 @@ To go through this, you will need the following:
 1. Just run with docker-compose from the directory where elastos-privnet is located(github.com/cyber-republic/elastos-privnet/blockchain):
 
    ```
+   cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain;
+   git checkout v0.3;
+   tools/copy_freshdata_docker.sh;
    docker-compose up --remove-orphans --build --force-recreate -d
    ```
 
@@ -54,7 +57,7 @@ To go through this, you will need the following:
 4. Verify the Token Sidechain is running by checking the pre-loaded wallet:
 
    ```
-   curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"EUscMawPCr8uFxKDtVxaq93Wbjm1DdtzeW"}}' http://localhost:40114
+   curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"getreceivedbyaddress","params":{"address":"EUscMawPCr8uFxKDtVxaq93Wbjm1DdtzeW"}}' http://localhost:40113
    ```
 
    You should see at least 99999.99 ELA in the miner wallet:
@@ -68,7 +71,7 @@ To go through this, you will need the following:
 1. Create a directory to work off of:
 
   ```
-  mkdir -p ~/node/ela
+  mkdir -p ~/node/ela;
   cd ~/node/ela
   ```
 
@@ -76,15 +79,17 @@ To go through this, you will need the following:
 
 - [ela](https://github.com/elastos/Elastos.ELA/releases/download/v0.3.2/ela)
   ```
-  wget https://github.com/elastos/Elastos.ELA/releases/download/v0.3.2/ela
+  wget https://github.com/elastos/Elastos.ELA/releases/download/v0.3.2/ela;
+  chmod +x ela
   ```
 - [ela-cli](https://github.com/elastos/Elastos.ELA/releases/download/v0.3.2/ela-cli)
   ```
-  wget https://github.com/elastos/Elastos.ELA/releases/download/v0.3.2/ela-cli
+  wget https://github.com/elastos/Elastos.ELA/releases/download/v0.3.2/ela-cli;
+  chmod +x ela-cli
   ```
 - [config.json](https://raw.githubusercontent.com/elastos/Elastos.ELA/release_v0.3.2/docs/dpos_config.json.sample)
   ```
-  wget https://raw.githubusercontent.com/elastos/Elastos.ELA/release_v0.3.2/docs/dpos_config.json.sample
+  wget https://raw.githubusercontent.com/elastos/Elastos.ELA/release_v0.3.2/docs/dpos_config.json.sample;
   mv dpos_config.json.sample config.json
   ```
 
@@ -96,6 +101,13 @@ To go through this, you will need the following:
   ```bash
   # This creates a keystore.dat file with password "elastos"
   ./ela-cli wallet create -p elastos
+  # Let's first save our ELA Address in a variable so we can keep on using # it
+  ELAADDRESS=$(./ela-cli wallet a -p elastos | tail -2 | head -1 | cut -d' ' -f1)
+  PUBLICKEY=$(./ela-cli wallet a -p elastos | tail -2 | head -1 | cut -d' ' -f2)
+  PRIVATEKEY=$(./ela-cli wallet export -p elastos | tail -2 | head -1 | cut -d' ' -f2)
+  # Make sure your info is correct
+  echo $ELAADDRESS $PUBLICKEY $PRIVATEKEY
+  ```
   ```
 
 4. Take a note of your public key associated to your wallet
@@ -103,23 +115,28 @@ To go through this, you will need the following:
 This is the node public key you will want to update to from your elastos wallet by editing your supernode details
 
   ```
-  ./ela-cli wallet account -p elastos
+  echo $PUBLICKEY
   ```
 
 5. Modify ela configuration file: `config.json`
 
 - For connecting to mainnet:
+
+  Refer to [https://github.com/cyber-republic/supernode-setup/tree/v0.1](https://github.com/cyber-republic/supernode-setup/tree/v0.1) for more detailed info on how to connect to mainnet
   ```json
   {
     "Configuration": {
       "DPoSConfiguration": {
         "EnableArbiter": true,
-        "IPAddress": "192.168.1.23"
+        "IPAddress": "192.168.0.1"
       },
+      "EnableRPC": true,
       "RpcConfiguration": {
-        "User": "user",
-        "Pass": "password",
-        "WhiteIPList": ["0.0.0.0"]
+        "User": "User",
+        "Pass": "Password",
+        "WhiteIPList": [
+          "127.0.0.1"
+        ]
       }
     }
   }
@@ -131,13 +148,13 @@ This is the node public key you will want to update to from your elastos wallet 
       "Magic": 7630401,
       "DisableDNS": true,
       "PermanentPeers": [
-        "127.0.0.1:10015",
-        "127.0.0.1:10115",
-        "127.0.0.1:10215",
-        "127.0.0.1:10315",
-        "127.0.0.1:10415",
-        "127.0.0.1:10515",
-        "127.0.0.1:10615"
+        "127.0.0.1:10016",
+        "127.0.0.1:10116",
+        "127.0.0.1:10216",
+        "127.0.0.1:10316",
+        "127.0.0.1:10416",
+        "127.0.0.1:10516",
+        "127.0.0.1:10616"
       ],
       "HttpRestStart": true,
       "EnableRPC": true,
@@ -150,7 +167,7 @@ This is the node public key you will want to update to from your elastos wallet 
         "EnableArbiter": true,
         "Magic": 7630403,
         "PrintLevel": 1,
-        "IPAddress": "192.168.1.23",
+        "IPAddress": "127.0.0.1",
         "SignTolerance": 5,
         "MaxLogsSize": 0,
         "MaxPerLogSize": 0,
@@ -220,25 +237,32 @@ This is the node public key you will want to update to from your elastos wallet 
 
 - [did](https://github.com/elastos/Elastos.ELA.SideChain.ID/releases/download/v0.1.2/did)
   ```
-  wget https://github.com/elastos/Elastos.ELA.SideChain.ID/releases/download/v0.1.2/did
+  wget https://github.com/elastos/Elastos.ELA.SideChain.ID/releases/download/v0.1.2/did;
+  chmod +x did
   ```
 - [config.json](https://raw.githubusercontent.com/elastos/Elastos.ELA.SideChain.ID/master/docs/mainnet_config.json.sample)
   ```
-  wget https://raw.githubusercontent.com/elastos/Elastos.ELA.SideChain.ID/master/docs/mainnet_config.json.sample
+  wget https://raw.githubusercontent.com/elastos/Elastos.ELA.SideChain.ID/master/docs/mainnet_config.json.sample;
   mv mainnet_config.json.sample config.json
   ```
 
 3. Modify did configuration file: `config.json`
 
 - For connecting to mainnet:
+
+  Refer to [https://github.com/cyber-republic/supernode-setup/tree/v0.1](https://github.com/cyber-republic/supernode-setup/tree/v0.1) for more detailed info on how to connect to mainnet
   ```json
   {
     "SPVDisableDNS": false,
-    "SPVPermanentPeers": ["127.0.0.1:20338"],
+    "SPVPermanentPeers": [
+      "localhost:20338"
+    ],
     "EnableRPC": true,
-    "RPCUser": "user",
-    "RPCPass": "password",
-    "RPCWhiteList": ["0.0.0.0"]
+    "RPCUser": "User",
+    "RPCPass": "Password",
+    "RPCWhiteList": [
+      "127.0.0.1"
+    ]
   }
   ```
 - For connecting to privatenet:
@@ -255,13 +279,13 @@ This is the node public key you will want to update to from your elastos wallet 
       "127.0.0.1:30415"
     ],
     "SPVPermanentPeers": [
-      "127.0.0.1:10015",
-      "127.0.0.1:10115",
-      "127.0.0.1:10215",
-      "127.0.0.1:10315",
-      "127.0.0.1:10415",
-      "127.0.0.1:10515",
-      "127.0.0.1:10615"
+      "127.0.0.1:10016",
+      "127.0.0.1:10116",
+      "127.0.0.1:10216",
+      "127.0.0.1:10316",
+      "127.0.0.1:10416",
+      "127.0.0.1:10516",
+      "127.0.0.1:10616"
     ],
     "ExchangeRate": 1.0,
     "MinCrossChainTxFee": 10000,
@@ -302,7 +326,7 @@ This is the node public key you will want to update to from your elastos wallet 
 1. Create a directory to work off of:
 
   ```
-  mkdir -p ~/node/token
+  mkdir -p ~/node/token;
   cd ~/node/token
   ```
 
@@ -310,25 +334,32 @@ This is the node public key you will want to update to from your elastos wallet 
 
 - [token](https://github.com/elastos/Elastos.ELA.SideChain.Token/releases/download/v0.1.2/token)
   ```
-  wget https://github.com/elastos/Elastos.ELA.SideChain.Token/releases/download/v0.1.2/token
+  wget https://github.com/elastos/Elastos.ELA.SideChain.Token/releases/download/v0.1.2/token;
+  chmod +x token
   ```
 - [config.json](https://raw.githubusercontent.com/elastos/Elastos.ELA.SideChain.Token/master/docs/mainnet_config.json.sample)
   ```
-  wget https://raw.githubusercontent.com/elastos/Elastos.ELA.SideChain.Token/master/docs/mainnet_config.json.sample
+  wget https://raw.githubusercontent.com/elastos/Elastos.ELA.SideChain.Token/master/docs/mainnet_config.json.sample;
   mv mainnet_config.json.sample config.json
   ```
 
 3. Modify token configuration file: `config.json`
 
 - For connecting to mainnet:
+
+  Refer to [https://github.com/cyber-republic/supernode-setup/tree/v0.1](https://github.com/cyber-republic/supernode-setup/tree/v0.1) for more detailed info on how to connect to mainnet
   ```json
   {
     "SPVDisableDNS": false,
-    "SPVPermanentPeers": ["127.0.0.1:20338"],
+    "SPVPermanentPeers": [
+      "localhost:20338"
+    ],
     "EnableRPC": true,
-    "RPCUser": "user",
-    "RPCPass": "password",
-    "RPCWhiteList": ["0.0.0.0"]
+    "RPCUser": "User",
+    "RPCPass": "Password",
+    "RPCWhiteList": [
+      "127.0.0.1"
+    ]
   }
   ```
 - For connecting to privatenet:
@@ -345,13 +376,13 @@ This is the node public key you will want to update to from your elastos wallet 
       "127.0.0.1:40415"
     ],
     "SPVPermanentPeers": [
-      "127.0.0.1:10015",
-      "127.0.0.1:10115",
-      "127.0.0.1:10215",
-      "127.0.0.1:10315",
-      "127.0.0.1:10415",
-      "127.0.0.1:10515",
-      "127.0.0.1:10615"
+      "127.0.0.1:10016",
+      "127.0.0.1:10116",
+      "127.0.0.1:10216",
+      "127.0.0.1:10316",
+      "127.0.0.1:10416",
+      "127.0.0.1:10516",
+      "127.0.0.1:10616"
     ],
     "ExchangeRate": 1.0,
     "MinCrossChainTxFee": 10000,
@@ -392,27 +423,25 @@ This is the node public key you will want to update to from your elastos wallet 
 1. Create a directory to work off of:
 
   ```
-  mkdir ~/node/carrier
+  mkdir ~/node/carrier;
   cd ~/node/carrier
   ```
 
 2. Download the files that are needed:
 
-- [carrier](https://github.com/elastos/Elastos.NET.Carrier.Bootstrap/releases/download/release-v5.2.2/elastos-carrier-bootstrap-5.2.2da37f-linux-x86_64-Debug.deb)
+- [carrier](https://github.com/elastos/Elastos.NET.Carrier.Bootstrap/releases/download/release-v5.2.3/elastos-carrier-bootstrap-5.2.717741-linux-x86_64-Debug.deb)
   ```
-  wget https://github.com/elastos/Elastos.NET.Carrier.Bootstrap/releases/download/release-v5.2.2/elastos-carrier-bootstrap-5.2.2da37f-linux-x86_64-Debug.deb
+  wget https://github.com/elastos/Elastos.NET.Carrier.Bootstrap/releases/download/release-v5.2.3/elastos-carrier-bootstrap-5.2.717741-linux-x86_64-Debug.deb
   ```
 
 3. Run carrier bootstrap node
 
   ```
-  sudo dpkg -i elastos-carrier-bootstrap-5.2.2da37f-linux-x86_64-Debug.deb
+  sudo dpkg -i elastos-carrier-bootstrap-5.2.717741-linux-x86_64-Debug.deb
   ```
 
 3. Make changes to `/etc/elastos/bootstrapd.conf`
-- Update bootstrap nodes list under the section "bootstrap_nodes" if you need to(so you can connect to elastos carrier nodes)
 - Set external IP to turn server explicitly: Some Linux VPS servers, for example, servers from AWS, can't fetch public IP address directly by itself, so you have manually update the public IP address of item external_ip under the section "turn"
-- As an example, you can look at [https://github.com/cyber-republic/supernode-setup/blob/master/docker/carrier/bootstrapd.conf](https://github.com/cyber-republic/supernode-setup/blob/master/docker/carrier/bootstrapd.conf)
 
 4. Restart carrier bootstrap node
 
@@ -432,9 +461,14 @@ This is the node public key you will want to update to from your elastos wallet 
 
 2. Get the public key of your DPoS node
 
-  ```
-  cd ~/node/ela
-  ./ela-cli wallet account -p elastos
+  Let's first save our ELA Address in a variable so we can keep on using it
+  ```bash
+  cd ~/node/ela;
+  ELAADDRESS=$(./ela-cli wallet a -p elastos | tail -2 | head -1 | cut -d' ' -f1)
+  PUBLICKEY=$(./ela-cli wallet a -p elastos | tail -2 | head -1 | cut -d' ' -f2)
+  PRIVATEKEY=$(./ela-cli wallet export -p elastos | tail -2 | head -1 | cut -d' ' -f2)
+  # Make sure your info is correct
+  echo $ELAADDRESS $PUBLICKEY $PRIVATEKEY
   ```
 
   Should return something like:
@@ -454,9 +488,8 @@ Go to your Elastos Wallet, open up your Supernode Edit Page and then enter the a
   NOTE: PLEASE DO NOT USE THIS METHOD TO REGISTER FOR YOUR SUPERNODE ON MAINNET AS THIS IS ONLY FOR TESTING PURPOSES. WE RECOMMEND USING ELASTOS WALLET TO REGISTER FOR YOUR SUPERNODE ON MAINNET
 
   ```
-  cd ~/node/ela 
-  cp $GOPATH/src/github.com/cyber-republic/developer-workshop/2019-06-05/register_supernode.lua .
-  ./ela-cli wallet depositaddr Ec39reRzMTixsYt7yoXkQWDi7kb5dwbj66
+  cp $GOPATH/src/github.com/cyber-republic/developer-workshop/2019-06-05/register_supernode.lua .;
+  ./ela-cli wallet depositaddr $ELAADDRESS
   ```
 
   Should output your "deposit_address" that you enter on register_supernode.lua script
@@ -473,7 +506,7 @@ Go to your Elastos Wallet, open up your Supernode Edit Page and then enter the a
 
   Let's send some ELA to this ELA address first because we need 5000 ELA to register for our supernode
   ```
-  curl -X POST -H "Content-Type: application/json" -d '{"sender": [{"address": "EUSa4vK5BkKXpGE3NoiUt695Z9dWVJ495s","privateKey": "109a5fb2b7c7abd0f2fa90b0a295e27de7104e768ab0294a47a1dd25da1f68a8"}],"receiver": [{"address": "Ec39reRzMTixsYt7yoXkQWDi7kb5dwbj66","amount": "6000"}]}' localhost:8091/api/1/transfer
+  curl -X POST -H "Content-Type: application/json" -d '{"sender": [{"address": "EUSa4vK5BkKXpGE3NoiUt695Z9dWVJ495s","privateKey": "109a5fb2b7c7abd0f2fa90b0a295e27de7104e768ab0294a47a1dd25da1f68a8"}],"receiver": [{"address": '"$ELAADDRESS"',"amount": "6000"}]}' localhost:8091/api/1/transfer
   ```
 
   Wait for the transaction to confirm(around 6 blocks) and then check your new balance:
@@ -498,6 +531,7 @@ Go to your Elastos Wallet, open up your Supernode Edit Page and then enter the a
 
 6. Verify your supernode got registered successfully
 
+  After about 6 blocks, check that your supernode got registered successfully
   ```
   curl --user user:password -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"method":"listproducers", "params":{"start":"0"}}' http://localhost:20336 
   ```
@@ -511,16 +545,16 @@ Go to your Elastos Wallet, open up your Supernode Edit Page and then enter the a
   curl -X POST -H "Content-Type: application/json" -d '{
       "sender":[
           {
-              "address":"Ec39reRzMTixsYt7yoXkQWDi7kb5dwbj66",
-              "privateKey":"b45d7babf77ad5d6b02291f38a3a0ad4827bbdcb86ab6bd467f1b8ef99ad3235"
+              "address":'"$ELAADDRESS"',
+              "privateKey":'"$PRIVATEKEY"'
           }
       ],
       "memo":"Voting for Dev Workshop Supernode",
       "receiver":[
           {
-              "address":"Ec39reRzMTixsYt7yoXkQWDi7kb5dwbj66",
+              "address":'"$ELAADDRESS"',
               "amount":"500",
-              "candidatePublicKeys":["036d49dfbb70932b8aea1218beee8dd7aa5e0aafa7a079cb15ba468d74c38a99cf"]
+              "candidatePublicKeys":['"$PUBLICKEY"']
           }
       ]
   }' localhost:8091/api/1/dpos/vote
@@ -609,3 +643,15 @@ Go to your Elastos Wallet, open up your Supernode Edit Page and then enter the a
   ```
 
   You can also check your balance using the mainchain node API
+
+## Stop your supernode processes
+
+  ```
+  cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain;
+  docker-compose down;
+  kill -9 $(ps aux | grep "./ela" | grep -v grep | cut -d' ' -f2);
+  kill -9 $(ps aux | grep "./did" | grep -v grep | cut -d' ' -f2);
+  kill -9 $(ps aux | grep "./token" | grep -v grep | cut -d' ' -f2);
+  sudo systemctl stop ela-bootstrapd;
+  cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain
+  ```
