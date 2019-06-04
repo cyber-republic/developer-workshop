@@ -108,7 +108,6 @@ To go through this, you will need the following:
   # Make sure your info is correct
   echo $ELAADDRESS $PUBLICKEY $PRIVATEKEY
   ```
-  ```
 
 4. Take a note of your public key associated to your wallet
 
