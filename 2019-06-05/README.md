@@ -428,15 +428,15 @@ This is the node public key you will want to update to from your elastos wallet 
 
 2. Download the files that are needed:
 
-- [carrier](https://github.com/elastos/Elastos.NET.Carrier.Bootstrap/releases/download/release-v5.2.3/elastos-carrier-bootstrap-5.2.717741-linux-x86_64-Debug.deb)
+- [carrier](https://github.com/elastos/Elastos.NET.Carrier.Bootstrap/releases/download/release-v5.2.3/elastos-carrier-bootstrap-5.2.623351-linux-x86_64-Debug.deb)
   ```
-  wget https://github.com/elastos/Elastos.NET.Carrier.Bootstrap/releases/download/release-v5.2.3/elastos-carrier-bootstrap-5.2.717741-linux-x86_64-Debug.deb
+  wget https://github.com/elastos/Elastos.NET.Carrier.Bootstrap/releases/download/release-v5.2.3/elastos-carrier-bootstrap-5.2.623351-linux-x86_64-Debug.deb
   ```
 
 3. Run carrier bootstrap node
 
   ```
-  sudo dpkg -i elastos-carrier-bootstrap-5.2.717741-linux-x86_64-Debug.deb
+  sudo dpkg -i elastos-carrier-bootstrap-5.2.623351-linux-x86_64-Debug.deb
   ```
 
 3. Make changes to `/etc/elastos/bootstrapd.conf`
