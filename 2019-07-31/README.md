@@ -11,7 +11,11 @@ To go through this, you will need the following:
 ## Contents
 
 0. Set up your Private Net
-1. Creating a DID, and Storing/Retrieving Metadata
+1. Create a DID
+2. Retrieve Metadata stored in DID
+3. Sign message using DID Private Key
+4. Verify contents of the message using DID Public key
+5. 
 
 ## Set up your Private Net
 
@@ -48,11 +52,11 @@ To go through this, you will need the following:
    {"Result":"100000","Error":0,"Desc":"Success"}
    ```
 
-## Creating a DID, and Storing/Retrieving Metadata
+## Create a DID
 
-You can check out all the different functions exposed via DID Service at [https://didservice.readthedocs.io](https://didservice.readthedocs.io)
+    You can check out all the different functions exposed via DID Service at [https://didservice.readthedocs.io](https://didservice.readthedocs.io)
 
-1. After creating a DID, you will receive both a did and a private key.
+    After creating a DID, you will receive both a did and a private key.
 
     ```
     curl http://localhost:8092/api/1/gen/did
@@ -127,7 +131,9 @@ You can check out all the different functions exposed via DID Service at [https:
 
     Don't be alarmed. Just wait for this transaction to be added to the block and look at the results again to verify whether it did go through.
 
-2. Retrieving the DID info must be on the Misc.API DID Sidechain - port 9092
+## Retrieve Metadata stored in DID
+
+    Retrieving the DID info must be on the Misc.API DID Sidechain - port 9092
 
     Even if you use DID Sidechain Service to store DID property, you need to use Misc.API for DID sidechain to retrieve the DID property which should be running on port `9092`.
 
@@ -155,3 +161,8 @@ You can check out all the different functions exposed via DID Service at [https:
         "status": 200
     }
     ```
+
+## Sign message using DID Private Key
+
+
+## Verify contents of the message using DID Public key
