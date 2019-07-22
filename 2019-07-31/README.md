@@ -18,8 +18,9 @@ To go through this, you will need the following:
 2. Sidechain Service: Retrieve Metadata stored in DID
 3. Sidechain Service: Sign message using DID Private Key
 4. Sidechain Service: Verify contents of the message using DID Public key
-5. DIDClient Java SDK: Create a DID, Retrieve Metadata stored in DID, Sign message using DID Private Key and Verify contents of the message using DID Public key
-6. 
+5. DIDClient Java SDK: Sample App interacting with DID Sidechain
+6. Elephant Wallet: Sample app showing off webapp authentication with Elastos DID Sidechain and Elephant Wallet
+7. Sneak Preview of Ethereum Sidechain
 
 ## Set up your Private Net
 
@@ -201,7 +202,7 @@ Should return something like:
 }
 ```
 
-## DIDClient Java SDK: Create a DID, Retrieve Metadata stored in DID, Sign message using DID Private Key and Verify contents of the message using DID Public key
+## DIDClient Java SDK: Sample App
 
 - Refer to [https://did-client-java-api.readthedocs.io/en/latest/](https://did-client-java-api.readthedocs.io/en/latest/) to learn more about the DIDClient Java SDK and the APIs that are available
 - API References and sample codes for SDK: [https://did-client-java-api.readthedocs.io/en/latest/did_client_api_guide/#elastossdkdidclientapi](https://did-client-java-api.readthedocs.io/en/latest/did_client_api_guide/#elastossdkdidclientapi)
@@ -221,9 +222,13 @@ This java app does the following:
 4. Sets a DID Property and puts it on the DID sidechain running on private net
 5. Gets a DID Property by Transaction ID
 6. Deletes DID Property attached to the DID
-7. Deletes DID from the DID sidechain
+NOTE: There's also code to delete DID from the DID sidechain so you can uncomment the code for deleting DID and comment the code for deleting DID Property and then try building the jar file and executing again.
 ```
     java -jar target/samples-0.1.0.jar;
 ```
 
-## 
+## Elephant Wallet: Sample app
+TODO
+
+## Sneak Preview of Ethereum Sidechain
+TODO

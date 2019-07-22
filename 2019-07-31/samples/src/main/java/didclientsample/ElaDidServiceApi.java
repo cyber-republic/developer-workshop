@@ -203,8 +203,8 @@ public class ElaDidServiceApi {
         String delDidPropertyTxId = sample.deleteDidProperty();
         System.out.println("TxId: " + delDidPropertyTxId);
 
-        System.out.printf("\nDeleting DID...\n");
-        String delDidTxId = sample.deleteDid();
-        System.out.println("TxId: " + delDidTxId);
+        //System.out.printf("\nDeleting DID...\n");
+        //String delDidTxId = sample.deleteDid();
+        //System.out.println("TxId: " + delDidTxId);
     }
 }
