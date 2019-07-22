@@ -5,17 +5,20 @@ To go through this, you will need the following:
 1. You are using a Mac/Linux
 2. You have installed docker and docker-compose
 3. You have installed Go
-4. You have checked out https://github.com/cyber-republic/elastos-privnet/tree/v0.4 and are on tag v0.4
-5. Catch up on First Developer Workshop on how to run an elastos private net on your local machine if you haven't. Visit [Elastos Developer Workshop #1: Running Private Net](https://www.youtube.com/watch?v=0Mn9pz2UORo) for more info
+4. You have installed java
+5. You have installed Maven
+    - On Ubuntu, just do "sudo apt install maven"
+6. You have checked out https://github.com/cyber-republic/elastos-privnet/tree/v0.4 and are on tag v0.4
+7. Catch up on First Developer Workshop on how to run an elastos private net on your local machine if you haven't. Visit [Elastos Developer Workshop #1: Running Private Net](https://www.youtube.com/watch?v=0Mn9pz2UORo) for more info
 
 ## Contents
 
 0. Set up your Private Net
-1. Create a DID
-2. Retrieve Metadata stored in DID
-3. Sign message using DID Private Key
-4. Verify contents of the message using DID Public key
-5. 
+1. Sidechain Service: Create a DID
+2. Sidechain Service: Retrieve Metadata stored in DID
+3. Sidechain Service: Sign message using DID Private Key
+4. Sidechain Service: Verify contents of the message using DID Public key
+5. DIDClient Java SDK: Create a DID, Retrieve Metadata stored in DID, Sign message using DID Private Key and Verify contents of the message using DID Public key
 
 ## Set up your Private Net
 
@@ -34,7 +37,7 @@ To go through this, you will need the following:
    curl http://localhost:10012/api/v1/asset/balances/EQ4QhsYRwuBbNBXc8BPW972xA9ANByKt6U
    ```
 
-   You should see at least 915 ELA in the miner wallet:
+   You should see at least 1000 ELA in the miner wallet:
 
    ```
    {"Desc":"Success","Error":0,"Result":"1005.60664465"}
@@ -52,7 +55,7 @@ To go through this, you will need the following:
    {"Result":"100000","Error":0,"Desc":"Success"}
    ```
 
-## Create a DID
+## Sidechain Service: Create a DID
 
 You can check out all the different functions exposed via DID Service at [https://didservice.readthedocs.io](https://didservice.readthedocs.io)
 
@@ -131,7 +134,7 @@ If you try to set the DID info before letting it be propagated to the block, you
 
 Don't be alarmed. Just wait for this transaction to be added to the block and look at the results again to verify whether it did go through.
 
-## Retrieve Metadata stored in DID
+## Sidechain Service: Retrieve Metadata stored in DID
 
 Retrieving the DID info must be on the Misc.API DID Sidechain - port 9092
 
@@ -162,7 +165,55 @@ Would return something like
 }
 ```
 
-## Sign message using DID Private Key
+## Sidechain Service: Sign message using DID Private Key
 
+You can use the API `POST /api/1/sign` to sign any message using your private key.
+```
+curl -X POST -H "Content-Type: application/json" -d '{"privateKey": "78F3F61DE57C2058FAB709641EAB8880F2312702896F5599FB4A714EBCF3CFFC", "msg": "This is our third developer workshop and it is all about DID. Our fourth developer workshop will be about introduction to ethereum sidechain. 😁"}' localhost:8092/api/1/sign
+```
 
-## Verify contents of the message using DID Public key
+Should return something like:
+```
+{
+  "result": {
+    "msg": "54686973206973206F757220746869726420646576656C6F70657220776F726B73686F7020616E6420697420697320616C6C2061626F7574204449442E204F757220666F7572746820646576656C6F70657220776F726B73686F702077696C6C2062652061626F757420696E74726F64756374696F6E20746F20657468657265756D2073696465636861696E2E20F09F9881",
+    "pub": "02BDA7DBA5E4E1E24245566AF75E34CC9933FAA99FFFC61081156CC05AE65422E2",
+    "sig": "DDFFC3BA14534C101500B324F0D1DA96A02FD5FEF160C6931C12C71DCE2D569397BF90E26BDC35277446A5806D97A9068D07CBB40E689D491E7DD0187D75F179"
+  },
+  "status": 200
+}
+```
+
+## Sidechain Service: Verify contents of the message using DID Public key
+
+You can use the API `POST /api/1/verify` to verify the message that was signed using your private key. This is how you can know whether the message indeed was signed by a public key.
+
+```
+curl -X POST -H "Content-Type: application/json" -d '{"msg":"54686973206973206F757220746869726420646576656C6F70657220776F726B73686F7020616E6420697420697320616C6C2061626F7574204449442E204F757220666F7572746820646576656C6F70657220776F726B73686F702077696C6C2062652061626F757420696E74726F64756374696F6E20746F20657468657265756D2073696465636861696E2E20F09F9881","pub":"02BDA7DBA5E4E1E24245566AF75E34CC9933FAA99FFFC61081156CC05AE65422E2","sig":"DDFFC3BA14534C101500B324F0D1DA96A02FD5FEF160C6931C12C71DCE2D569397BF90E26BDC35277446A5806D97A9068D07CBB40E689D491E7DD0187D75F179"}' localhost:8092/api/1/verify
+```
+
+Should return something like:
+```
+{
+  "result": true,
+  "status": 200
+}
+```
+
+## DIDClient Java SDK: Create a DID, Retrieve Metadata stored in DID, Sign message using DID Private Key and Verify contents of the message using DID Public key
+
+- Refer to [https://did-client-java-api.readthedocs.io/en/latest/](https://did-client-java-api.readthedocs.io/en/latest/) to learn more about the DIDClient Java SDK and the APIs that are available
+- API References and sample codes for SDK: [https://did-client-java-api.readthedocs.io/en/latest/did_client_api_guide/#elastossdkdidclientapi](https://did-client-java-api.readthedocs.io/en/latest/did_client_api_guide/#elastossdkdidclientapi)
+- Github repo: [https://github.com/elastos/Elastos.SDK.DIDClient.Java](https://github.com/elastos/Elastos.SDK.DIDClient.Java)
+- Build the jar file
+```
+    cd samples;
+    mvn clean;
+    mvn compile;
+    mvn package;
+```
+- Run the jar file
+
+```
+    java -jar target/samples-0.1.0.jar;
+```
