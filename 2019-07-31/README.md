@@ -19,7 +19,7 @@ To go through this, you will need the following:
 3. Sidechain Service: Sign message using DID Private Key
 4. Sidechain Service: Verify contents of the message using DID Public key
 5. DIDClient Java SDK: Sample App interacting with DID Sidechain
-6. Elephant Wallet: Sample app showing off webapp authentication with Elastos DID Sidechain and Elephant Wallet
+6. Elephant Wallet API: Sample app showing off webapp authentication with Elastos DID Sidechain and Elephant Wallet
 7. Sneak Preview of Ethereum Sidechain
 
 ## Set up your Private Net
