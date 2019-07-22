@@ -19,6 +19,7 @@ To go through this, you will need the following:
 3. Sidechain Service: Sign message using DID Private Key
 4. Sidechain Service: Verify contents of the message using DID Public key
 5. DIDClient Java SDK: Create a DID, Retrieve Metadata stored in DID, Sign message using DID Private Key and Verify contents of the message using DID Public key
+6. 
 
 ## Set up your Private Net
 
@@ -213,7 +214,16 @@ Should return something like:
     mvn package;
 ```
 - Run the jar file
-
+This java app does the following:
+1. Creates a new DID on private net using DIDClient java SDK
+2. Gets Public Key of the newly created DID
+3. Signs a message and verifies it using DID private key
+4. Sets a DID Property and puts it on the DID sidechain running on private net
+5. Gets a DID Property by Transaction ID
+6. Deletes DID Property attached to the DID
+7. Deletes DID from the DID sidechain
 ```
     java -jar target/samples-0.1.0.jar;
 ```
+
+## 
