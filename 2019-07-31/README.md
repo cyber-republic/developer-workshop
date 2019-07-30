@@ -228,7 +228,104 @@ NOTE: There's also code to delete DID from the DID sidechain so you can uncommen
 ```
 
 ## Elephant Wallet: Sample app
-TODO
+- Courtesy of Jimmy from the community, [https://github.com/Compy](https://github.com/Compy), there is now a very simple web app that uses Elephant Wallet's DID as an authentication mechanism to register and log in to the website
+- Clone the github repo of the did auth sample
+    `git clone https://github.com/Compy/elastos-did-auth-sample`
+- Follow the instructions(until Step #7) to set up the environment to run the web app in at [https://github.com/Compy/elastos-did-auth-sample/blob/master/README.md](https://github.com/Compy/elastos-did-auth-sample/blob/master/README.md)
+- For the mysql database, we can just use the existing one that's already running as part of the Elastos Private net. You can check out its info at [https://github.com/cyber-republic/elastos-privnet/blob/master/blockchain/docker-compose.yml](https://github.com/cyber-republic/elastos-privnet/blob/master/blockchain/docker-compose.yml) but basically, below is the info you will be using in your .env file:
+    `
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3307
+    DB_DATABASE=ws
+    DB_USERNAME=elastos
+    DB_PASSWORD=12345678
+    `
+- For the env variable "APP_URL", you need to set it to your own IP address. For me, it's 192.168.1.23 and since the web app will be running on port 8000 on this IP address, I can set mine to the following:
+    `APP_URL=http://192.168.1.23:8000`
+- Last but not least, we also need to modify the DID section in the .env file. For now, you can just use the following but if you wanted to generate your own App ID and put it on the DID sidechain, have a look at [https://zuohuahua.github.io/Elastos.Tools.Creator.Capsule/](https://zuohuahua.github.io/Elastos.Tools.Creator.Capsule/). This website lets you generate DIDs on the fly and also to register your app on the DID sidechain. This is needed because this is what Elephant Wallet API will be requesting later on.
+    `
+    ELA_MNEMONIC="found case balcony law corn degree useless toddler install october elite goat"
+    ELA_PRIVATE_KEY=0fc33eb184823fb80b9ac5ce34665ffba04598bc744fb6b8c41f8ec881d07274
+    ELA_PUBLIC_KEY=02b8d47891ea51dd78ed97d49697fbb426bcaa6cb94f25e29714b873fb624c80d1
+    ELA_ADDRESS=Eb1XdvCyxpTkMphK58s5S7kaK8QiLA5unc
+    ELA_DID=iTHeDCTWrTFiV9HwrFMHy8ede59Aq62TrD
+    ELA_APP_NAME=LaravelKPTest
+    ELA_APP_ID=67b054ec2392ef0723fb5a1bee0b730eacb1d371fb0349ed95023d6a8dbdb9aa27c3eff7f28fb3f0a5b62fb48c16e0cac87d62f6f2585066db57e56272b943b7
+    ELA_CALLBACK="${APP_URL}/api/did/callback"
+    `
+- Now, follow the instructions from Step #8-#10 from [https://github.com/Compy/elastos-did-auth-sample/blob/master/README.md](https://github.com/Compy/elastos-did-auth-sample/blob/master/README.md)
+- Once you execute `php artisan serve --host 0.0.0.0`, your web app should be running
+- You can now go to `localhost:8000` from your web browser and you will see the web app that will give you an option to register and login and also "Register with Elastos"
+- Click on "Register with Elastos". This gets you a QR code on the screen
+- Now, go to your Elephant Wallet and scan the QR code from there
+- Once successful, this will automatically take you to the Registration page on the web app on your browser which will have your information pre-filled. All of this info was populated from whatever you have set your profile to contain on Elephant Wallet
+- Great. Now you are logged in. You can log out and try to login using the same procedure
+- This demo shows how a web app is able to utilize DID login using Elephant Wallet to authenticate to a web app. This sort of button utilizing DID login can be added to any existing web app. 
+- Elastos DX team will be coming up with videos, tutorials and libraries that any developer can use in their own app. Be sure to sign up to Developer Email List to get notified.
 
 ## Sneak Preview of Ethereum Sidechain
-TODO
+
+### Transfer some ELA from main chain to ETH Sidechain
+1. Change directory
+  ```
+  cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain/ela-mainchain
+  ```
+
+2. Configure ela-cli config file
+
+    Create a file called "cli-config.json" and put the following content in that file:
+
+    ```
+    {
+      "Host": "127.0.0.1:10014",
+      "DepositAddress":"XZyAtNipJ7fdgBRhdzCoyS7A3PDSzR7u98"
+    }
+3. Create a new wallet using ela-cli-crosschain client for testing purposes
+
+    ```
+    ./ela-cli-crosschain wallet --create -p elastos
+    ```
+
+    Save ELA address, Public key and Private key to a variable so it can be used later
+    ```bash
+    ELAADDRESS=$(./ela-cli-crosschain wallet -a -p elastos | tail -2 | head -1 | cut -d' ' -f1)
+    PUBLICKEY=$(./ela-cli-crosschain wallet -a -p elastos | tail -2 | head -1 | cut -d' ' -f2)
+    PRIVATEKEY=$(./ela-cli-crosschain wallet --export -p elastos | tail -2 | head -1 | cut -d' ' -f2)
+    # Make sure your info is correct
+    echo $ELAADDRESS $PUBLICKEY $PRIVATEKEY
+    ```
+
+4. Transfer ELA from the resources wallet to this newly created wallet
+
+    ```
+    curl -X POST -H "Content-Type: application/json" -d '{"sender": [{"address": "EUSa4vK5BkKXpGE3NoiUt695Z9dWVJ495s","privateKey": "109a5fb2b7c7abd0f2fa90b0a295e27de7104e768ab0294a47a1dd25da1f68a8"}],"receiver": [{"address": '"$ELAADDRESS"',"amount": "100000"}]}' localhost:8091/api/1/transfer
+    ```
+
+    Check whether the ELA got transferred successfully
+
+    ```
+    ./ela-cli-crosschain wallet -l
+    ```
+5. Transfer ELA from main chain to eth sidechain
+
+    ```
+    ./ela-cli-crosschain wallet -t create --from $ELAADDRESS --deposit 0x4505b967d56f84647eb3a40f7c365f7d87a88bc3 --amount 99999 --fee 0.1;
+    ./ela-cli-crosschain wallet -t sign -p elastos --file to_be_signed.txn;
+    ./ela-cli-crosschain wallet -t send --file ready_to_send.txn;
+    ```
+6. Check eth balance:
+
+  ```
+  curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x4505b967d56f84647eb3a40f7c365f7d87a88bc3", "latest"],"id":1}' localhost:60011
+  ```
+
+  Should return something like:
+  ```
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": "0x152cf383e51ef1920000"
+  }
+  ```
+  0x152cf383e51ef1920000 is 99998900000000000000000 in decimal format which is the unit in wei. This equals to 99998.9 ETH ELA
