@@ -11,6 +11,18 @@ To go through this, you will need the following:
 6. You have checked out https://github.com/cyber-republic/elastos-privnet/tree/v0.4 and are on tag v0.4
 7. Catch up on First Developer Workshop on how to run an elastos private net on your local machine if you haven't. Visit [Elastos Developer Workshop #1: Running Private Net](https://www.youtube.com/watch?v=0Mn9pz2UORo) for more info
 
+## Resources
+- [https://github.com/cyber-republic/elastos-privnet](https://github.com/cyber-republic/elastos-privnet)
+- [https://github.com/cyber-republic/developer-workshop](https://github.com/cyber-republic/developer-workshop)
+- [https://github.com/elastos/Elastos.ORG.SideChain.Service](https://github.com/elastos/Elastos.ORG.SideChain.Service)
+- [https://didservice.readthedocs.io/en/latest/api_guide.html#centralized-service-api](https://didservice.readthedocs.io/en/latest/api_guide.html#centralized-service-api)
+- [https://zuohuahua.github.io/Elastos.Tools.Creator.Capsule/](https://zuohuahua.github.io/Elastos.Tools.Creator.Capsule/)
+- [https://did-client-java-api.readthedocs.io/en/latest/](https://did-client-java-api.readthedocs.io/en/latest/)
+- [https://github.com/elastos/Elastos.SDK.DIDClient.Java](https://github.com/elastos/Elastos.SDK.DIDClient.Java)
+- [https://did-client-java-api.readthedocs.io/en/latest/did_client_api_guide/](https://did-client-java-api.readthedocs.io/en/latest/did_client_api_guide/)
+- [https://github.com/Compy/elastos-did-auth-sample](https://github.com/Compy/elastos-did-auth-sample)
+- [https://github.com/elastos/Elastos.Developer.Doc/blob/master/EN/6.%20Advanced%20Guides/11.%20ElephantWallet.md](https://github.com/elastos/Elastos.Developer.Doc/blob/master/EN/6.%20Advanced%20Guides/11.%20ElephantWallet.md)
+
 ## Contents
 
 0. Set up your Private Net
