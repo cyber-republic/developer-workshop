@@ -64,6 +64,7 @@ You can check out all the different functions exposed via DID Service at [https:
 After creating a DID, you will receive both a did and a private key.
 
 ```
+cd $GOPATH/src/github.com/cyber-republic/developer-workshop/2019-07-31;
 curl http://localhost:8092/api/1/gen/did
 ```
 
@@ -144,7 +145,7 @@ Even if you use DID Sidechain Service to store DID property, you need to use Mis
 
 The API call should be `http://localhost:9092/api/1/did/{did}/{key}`
 
-For example if you stored the property key "clark" above, and assuming the did was `iXxFsEtpt8krhcNbVL7gzRfNqrJdRT4bSw`, then calling
+For example if you stored the property key "PrivateNet" above, and assuming the did was `iXxFsEtpt8krhcNbVL7gzRfNqrJdRT4bSw`, then calling
 
 ```
 curl http://localhost:9092/api/1/did/iXxFsEtpt8krhcNbVL7gzRfNqrJdRT4bSw/PrivateNet
@@ -226,11 +227,55 @@ NOTE: There's also code to delete DID from the DID sidechain so you can uncommen
 ```
     java -jar target/samples-0.1.0.jar;
 ```
+- Check whether the info is added to the DID sidechain. Make sure to replace $DID with whatever the DID was used to store the info in.
+```
+curl http://localhost:9092/api/1/did/$DID/PrivateNet
+```
+
+Would return something like
+```
+{
+  "result": {
+    "Did": "ic9VwPxKPf79MACVLJ6ghSBos4ZZavfJL6",
+    "Did_status": 1,
+    "Public_key": "03E4AD6ED49838009C9403732C7233FAD3A7D337D668915ECD82BB0111DEC55F89",
+    "Property_key": "PrivateNet",
+    "Property_value": "[\"Elastos Developer Workshop #3: Decentralized Identifier Sidechain\",\"July is all about DID Sidechain\",\"August is all about Ethereum Sidechain\"]",
+    "Txid": "e6dd14a0a39d60c3be773e1619e26eb7d864c1c622a8a0ee7279ef555ad37936",
+    "Block_time": 1564584754,
+    "Height": 466
+  },
+  "status": 200
+}
+```
+- Try to uncomment out the part about deleting the DID property and recompile and see if it works. After you make changes to the code at src/main/java/didclientsample/ElaDidServiceApi.java, do the following again:
+```
+    mvn compile;
+    mvn package;
+    java -jar target/samples-0.1.0.jar;
+```
+- Now, if you try to get the info from the DID that was supposed to store the info on the DID sidechain, you will not be getting any data back because we also made sure to delete the DID property as part of the Java Application. Make sure to replace $DID with whatever the DID was used to store the info in.
+```
+curl http://localhost:9092/api/1/did/$DID/PrivateNet
+```
+
+Would return something like
+```
+{
+  "result": "did is discarded or property key is discarded",
+  "status": 200
+}
+```
 
 ## Elephant Wallet: Sample app
 - Courtesy of Jimmy from the community, [https://github.com/Compy](https://github.com/Compy), there is now a very simple web app that uses Elephant Wallet's DID as an authentication mechanism to register and log in to the website
 - Clone the github repo of the did auth sample
-    `git clone https://github.com/Compy/elastos-did-auth-sample`
+```
+mkdir $GOPATH/src/github.com/Compy;
+cd $GOPATH/src/github.com/Compy;
+git clone https://github.com/Compy/elastos-did-auth-sample;
+cd elastos-did-auth-sample;
+```
 - Follow the instructions(until Step #7) to set up the environment to run the web app in at [https://github.com/Compy/elastos-did-auth-sample/blob/master/README.md](https://github.com/Compy/elastos-did-auth-sample/blob/master/README.md)
 - For the mysql database, we can just use the existing one that's already running as part of the Elastos Private net. You can check out its info at [https://github.com/cyber-republic/elastos-privnet/blob/master/blockchain/docker-compose.yml](https://github.com/cyber-republic/elastos-privnet/blob/master/blockchain/docker-compose.yml) but basically, below is the info you will be using in your .env file:
     `
@@ -241,7 +286,7 @@ NOTE: There's also code to delete DID from the DID sidechain so you can uncommen
     DB_USERNAME=elastos
     DB_PASSWORD=12345678
     `
-- For the env variable "APP_URL", you need to set it to your own IP address. For me, it's 192.168.1.23 and since the web app will be running on port 8000 on this IP address, I can set mine to the following:
+- For the env variable "APP_URL", you need to set it to your own IP address. For me, it's 192.168.1.23 and since the web app will be running on port 8000 on this IP address, I can set mine to the following, but yours obviously might be a different IP address:
     `APP_URL=http://192.168.1.23:8000`
 - Last but not least, we also need to modify the DID section in the .env file. For now, you can just use the following but if you wanted to generate your own App ID and put it on the DID sidechain, have a look at [https://zuohuahua.github.io/Elastos.Tools.Creator.Capsule/](https://zuohuahua.github.io/Elastos.Tools.Creator.Capsule/). This website lets you generate DIDs on the fly and also to register your app on the DID sidechain. This is needed because this is what Elephant Wallet API will be requesting later on.
     `
@@ -329,3 +374,13 @@ NOTE: There's also code to delete DID from the DID sidechain so you can uncommen
   }
   ```
   0x152cf383e51ef1920000 is 99998900000000000000000 in decimal format which is the unit in wei. This equals to 99998.9 ETH ELA
+7. Clean up your environment:
+  
+  ```
+  cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain/ela-mainchain;
+  rm -f cli-config.json keystore.dat ready_to_send.txn to_be_signed.txn wallet.db;
+  cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain;
+  tools/copy_dockerdata_host.sh;
+  cd $GOPATH/src/github.com/cyber-republic/developer-workshop/2019-07-31;
+  git checkout samples/src/main/java/didclientsample/ElaDidServiceApi.java
+  ```

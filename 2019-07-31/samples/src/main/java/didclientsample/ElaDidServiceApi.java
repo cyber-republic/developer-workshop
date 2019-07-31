@@ -52,7 +52,7 @@ public class ElaDidServiceApi {
             System.out.println("Err DidService.signAndVerifyDidMessage() - Signing failed.");
             return;
         } else {
-            System.out.println("DidService.signAndVerifyDidMessage() - Successfully signed\nSig: " + sig);
+            System.out.println("DidService.signAndVerifyDidMessage() - Successfully signed");
         }
 
         boolean isVerify = didService.verifyMessage(didPublicKey, sig, didPropertyKey);
@@ -199,9 +199,9 @@ public class ElaDidServiceApi {
         String property = sample.getDidPropertyByTxId(setDidTxId);
         System.out.println("Property: " + property);
 
-        System.out.printf("\nDeleting DID Property...\n");
-        String delDidPropertyTxId = sample.deleteDidProperty();
-        System.out.println("TxId: " + delDidPropertyTxId);
+        //System.out.printf("\nDeleting DID Property...\n");
+        //String delDidPropertyTxId = sample.deleteDidProperty();
+        //System.out.println("TxId: " + delDidPropertyTxId);
 
         //System.out.printf("\nDeleting DID...\n");
         //String delDidTxId = sample.deleteDid();
