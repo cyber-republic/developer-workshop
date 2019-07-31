@@ -1,3 +1,5 @@
+# Workshop #3: Decentralized Identifier Sidechain
+
 ## Requirements
 
 To go through this, you will need the following:

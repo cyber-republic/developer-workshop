@@ -1,3 +1,5 @@
+# Workshop #2: How to setup a supernode
+
 ## Requirements
 
 To go through this, you will need the following:

@@ -1,3 +1,5 @@
+# Workshop #1: Running Private Net
+
 ## Requirements
 
 To go through this, you will need the following:
