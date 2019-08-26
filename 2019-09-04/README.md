@@ -24,9 +24,8 @@ To go through this, you will need the following:
 3. Interact with Ethereum Sidechain using RPC methods
 4. Interacting with Management APIs
 5. Managing Accounts: Create accounts, import wallets, list accounts and check balances
-6. Run your own Ethereum Sidechain browser
-7. Connect to Ethereum Sidechain testnet
-8. Deploy a simple Ethereum Smart Contract
+6. Connect to Ethereum Sidechain testnet
+7. Deploy a simple Ethereum Smart Contract
 
 ## Transfer ELA from main chain to ETH Sidechain
 1. Change directory
