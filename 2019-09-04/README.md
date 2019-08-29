@@ -15,6 +15,9 @@ To go through this, you will need the following:
 - Eth RPC Methods: [https://github.com/ethereum/wiki/wiki/JSON-RPC#json-rpc-methods](https://github.com/ethereum/wiki/wiki/JSON-RPC#json-rpc-methods)
 - Management APIs: [https://github.com/elastos/Elastos.ELA.SideChain.ETH/wiki/Management-APIs](https://github.com/elastos/Elastos.ELA.SideChain.ETH/wiki/Management-APIs)
 - Managing Accounts: [https://github.com/elastos/Elastos.ELA.SideChain.ETH/wiki/Managing-your-accounts](https://github.com/elastos/Elastos.ELA.SideChain.ETH/wiki/Managing-your-accounts)
+- What is Ethereum Sidechain: [https://developer.elastos.org/discover_elastos/core_modules/ethereum_sidechain/](https://developer.elastos.org/discover_elastos/core_modules/ethereum_sidechain/)
+- Ethereum Sidechain RPC Reference: [https://developer.elastos.org/elastos_blockchain/reference/rpc/ethereum_sidechain/](https://developer.elastos.org/elastos_blockchain/reference/rpc/ethereum_sidechain/)
+- Ethereum Sidechain Smart Contract Guide: [https://developer.elastos.org/elastos_core_services/guides/ethereum_smart_contracts/](https://developer.elastos.org/elastos_core_services/guides/ethereum_smart_contracts/)
 
 ## Contents
 
@@ -27,7 +30,34 @@ To go through this, you will need the following:
 6. Connect to Ethereum Sidechain testnet
 7. Deploy a simple Ethereum Smart Contract
 
+## Set up your Private Net
+
+1. Just run with docker-compose from the directory where elastos-privnet is located(github.com/cyber-republic/elastos-privnet/blockchain):
+
+   ```
+   cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain;
+   git checkout v0.5;
+   tools/copy_freshdata_docker.sh;
+   docker-compose up --remove-orphans --build --force-recreate -d
+   ```
+
+2. Verify the Mainchain is running by checking the miner reward wallet:
+
+   ```
+   curl http://localhost:10012/api/v1/asset/balances/EQ4QhsYRwuBbNBXc8BPW972xA9ANByKt6U
+   ```
+
+   You should see at least 1000 ELA in the miner wallet:
+
+   ```
+   {"Desc":"Success","Error":0,"Result":"1005.60664465"}
+   ```
+
+## Intro to Ethereum Sidechain
+- [Ethereum Sidechain on Elastos Developer Portal](https://developer.elastos.org/discover_elastos/core_modules/ethereum_sidechain/)
+
 ## Transfer ELA from main chain to ETH Sidechain
+
 1. Change directory
   ```
   cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain/ela-mainchain
@@ -100,3 +130,77 @@ To go through this, you will need the following:
   cd $GOPATH/src/github.com/cyber-republic/developer-workshop/2019-07-31;
   git checkout samples/src/main/java/didclientsample/ElaDidServiceApi.java
   ```
+
+## Interact with Ethereum Sidechain using RPC methods
+1. **eth_gasPrice**: Returns the current price per gas in wei
+  ```
+  curl -X POST -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"jsonrpc":"2.0","method":"eth_gasPrice","params":[],"id":73}' http://localhost:60111
+  ```
+  Should return 
+  ```
+  {
+    "jsonrpc": "2.0",
+    "id": 73,
+    "result": "0x77359400"
+  }
+  ```
+  0x77359400 is 2000000000 in decimal format which is the unit in Wei. This equals to 0.000000002 ETH ELA
+2. **eth_getBalance**: Returns the ETH ELA balance for the given address
+   ```
+   curl -X POST -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x4505b967d56f84647eb3a40f7c365f7d87a88bc3", "latest"],"id":1}' localhost:60111
+   ```
+  Should return:
+  ```
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": "0x152cf383e51ef1920000"
+  }
+  ```
+  0x152cf383e51ef1920000 is 99998900000000000000000 in decimal format which is the unit in Wei. This equals to 99998.9 ETH ELA
+3. **eth_getBlockByHash**: Returns information about a block from its hash
+  ```
+  curl -X POST -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"jsonrpc":"2.0","method":"eth_getBlockByHash","params":["0xb0cd29490c792dbcbe75adadee415270b9e5c8ae89dfed835440f2ac606eebfc", true],"id":1}' http://localhost:60111
+  ```
+  Should return
+  ```
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "difficulty": "0x1",
+      "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000961386e437294f9171040e2d56d4522c4f55187d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "gasLimit": "0x2068f7700",
+      "gasUsed": "0x0",
+      "hash": "0xb0cd29490c792dbcbe75adadee415270b9e5c8ae89dfed835440f2ac606eebfc",
+      "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "miner": "0x0000000000000000000000000000000000000000",
+      "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "nonce": "0x0000000000000000",
+      "number": "0x0",
+      "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "receiptsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+      "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+      "size": "0x274",
+      "stateRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+      "timestamp": "0x5bda9da6",
+      "totalDifficulty": "0x1",
+      "transactions": [],
+      "transactionsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+      "uncles": []
+    }
+  }
+  ```
+
+  Note: The block hash we used is that of privnet Ethereum sidechain genesis block
+4. For interacting with more RPC methods, visit [https://github.com/ethereum/wiki/wiki/JSON-RPC#json-rpc-methods](https://github.com/ethereum/wiki/wiki/JSON-RPC#json-rpc-methods)
+
+## Interacting with Management APIs
+1. These management APIs are also provided using RPC methods and follow exactly the same conventions. The purpose of this section is only to briefly introduce what these management APIs are.
+2. You have access to the management APIs when you run `geth console --testnet`. For more info on what the management APIs are, please refer to [https://github.com/elastos/Elastos.ELA.SideChain.ETH/wiki/Management-APIs](https://github.com/elastos/Elastos.ELA.SideChain.ETH/wiki/Management-APIs)
+
+## Managing Accounts: Create accounts, import wallets, list accounts and check balances
+
+## Connect to Ethereum Sidechain testnet
+
+## Deploy a simple Ethereum Smart Contract
