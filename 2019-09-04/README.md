@@ -8,9 +8,10 @@ To go through this, you will need the following:
 2. You have installed docker and docker-compose
 3. You have checked out https://github.com/cyber-republic/elastos-privnet/tree/v0.5 and are on tag v0.5
 4. Catch up on First Developer Workshop on how to run an elastos private net on your local machine if you haven't. Visit [Elastos Developer Workshop #1: Running Private Net](https://www.youtube.com/watch?v=0Mn9pz2UORo) for more info
-5. You have installed NodeJS and NPM
+5. You have installed NodeJS, NPM, Truffle Box and Solidity compiler
   ```
   sudo apt-get install nodejs npm;
+  npm install -g truffle solc;
   ```
 
 ## Resources
@@ -336,7 +337,264 @@ NOTE: Currently, there is no way to run a second node and connect that node to y
   cd $GOPATH/src/github.com/cyber-republic/developer-workshop/2019-09-04/smart_contracts;
   npm install -g truffle;
   ```
+
 2. Install Solidity Compiler
   ```
   npm install -g solc;
   ```
+
+3. Compile Eth Smart Contracts
+  ```
+  truffle compile;
+  ```
+  Should return something like:
+  ```
+  Compiling your contracts...
+  ===========================
+  > Compiling ./contracts/HelloWorld.sol
+  > Compiling ./contracts/Migrations.sol
+  > Compiling ./contracts/StoreNumber.sol
+  > Artifacts written to /home/kpachhai/dev/src/github.com/cyber-republic/developer-workshop/2019-09-04/smart_contracts/build/contracts
+  > Compiled successfully using:
+    - solc: 0.5.1+commit.c8a2cb62.Emscripten.clang
+  ```
+
+4. Unlock our account 
+  Stop your currently running geth process and rerun with the following command. Note that a new flag "console" has been added
+  ```
+  ./geth --testnet --datadir elastos_eth --ethash.dagdir elastos_ethash --rpc --rpcaddr 0.0.0.0 --rpccorsdomain '*' --rpcport 21636 --rpcapi 'personal,db,eth,net,web3,txpool,miner' console
+  ```
+
+  Then, unlock your account that we created in testnet. I'm going to unlock 0x285f996244aa936e1c54bcf77d5e253790614af5
+  ```
+  > personal.unlockAccount(web3.eth.coinbase)
+  ```
+  Should return
+  ```
+  Unlock account 0x285f996244aa936e1c54bcf77d5e253790614af5
+  Passphrase: 
+  true
+  ```
+
+5. Migrate Eth Smart Contracts
+  ```
+  truffle migrate --network develop;
+  ```
+  Should return something like
+  ```
+  Compiling your contracts...
+  ===========================
+  > Everything is up to date, there is nothing to compile.
+
+
+  Migrations dry-run (simulation)
+  ===============================
+  > Network name:    'develop-fork'
+  > Network id:      3
+  > Block gas limit: 0x7a1200
+
+
+  1_initial_migration.js
+  ======================
+
+    Deploying 'Migrations'
+    ----------------------
+    > block number:        75741
+    > block timestamp:     1567521542
+    > account:             0x285f996244AA936E1c54Bcf77d5e253790614Af5
+    > balance:             0.10900768
+    > gas used:            268300
+    > gas price:           2 gwei
+    > value sent:          0 ETH
+    > total cost:          0.0005366 ETH
+
+    -------------------------------------
+    > Total cost:           0.0005366 ETH
+
+
+  2_deploy_HelloWorld.js
+  ======================
+
+    Deploying 'HelloWorld'
+    ----------------------
+    > block number:        75743
+    > block timestamp:     1567521542
+    > account:             0x285f996244AA936E1c54Bcf77d5e253790614Af5
+    > balance:             0.108485426
+    > gas used:            234099
+    > gas price:           2 gwei
+    > value sent:          0 ETH
+    > total cost:          0.000468198 ETH
+
+    -------------------------------------
+    > Total cost:         0.000468198 ETH
+
+
+  3_deploy_StoreNumber.js
+  =======================
+
+    Deploying 'StoreNumber'
+    -----------------------
+    > block number:        75745
+    > block timestamp:     1567521543
+    > account:             0x285f996244AA936E1c54Bcf77d5e253790614Af5
+    > balance:             0.108203052
+    > gas used:            114159
+    > gas price:           2 gwei
+    > value sent:          0 ETH
+    > total cost:          0.000228318 ETH
+
+    -------------------------------------
+    > Total cost:         0.000228318 ETH
+
+
+  Summary
+  =======
+  > Total deployments:   3
+  > Final cost:          0.001233116 ETH
+
+
+  Starting migrations...
+  ======================
+  > Network name:    'develop'
+  > Network id:      3
+  > Block gas limit: 0x7a1200
+
+
+  1_initial_migration.js
+  ======================
+
+    Deploying 'Migrations'
+    ----------------------
+    > transaction hash:    0x9428fca370b41ff5d6468057753675f2a14aa1aed6671194fba38a50cf559b59
+    > Blocks: 0            Seconds: 12
+    > contract address:    0x44bd7606C53a53088fDeDE4Bab294d3eD9AcB43d
+    > block number:        75741
+    > block timestamp:     1567521557
+    > account:             0x285f996244AA936E1c54Bcf77d5e253790614Af5
+    > balance:             0.10387828
+    > gas used:            283300
+    > gas price:           20 gwei
+    > value sent:          0 ETH
+    > total cost:          0.005666 ETH
+
+
+    > Saving migration to chain.
+    > Saving artifacts
+    -------------------------------------
+    > Total cost:            0.005666 ETH
+
+
+  2_deploy_HelloWorld.js
+  ======================
+
+    Deploying 'HelloWorld'
+    ----------------------
+    > transaction hash:    0x9f51eef8f8d635b1bb1847122ff9f60bb035a1a9e603f16dcd497ba5ea725550
+    > Blocks: 0            Seconds: 12
+    > contract address:    0x0CF5E37FB86A19E14Ddf305a6B65754dB8dB2F22
+    > block number:        75743
+    > block timestamp:     1567521587
+    > account:             0x285f996244AA936E1c54Bcf77d5e253790614Af5
+    > balance:             0.09835574
+    > gas used:            234099
+    > gas price:           20 gwei
+    > value sent:          0 ETH
+    > total cost:          0.00468198 ETH
+
+
+    > Saving migration to chain.
+    > Saving artifacts
+    -------------------------------------
+    > Total cost:          0.00468198 ETH
+
+
+  3_deploy_StoreNumber.js
+  =======================
+
+    Deploying 'StoreNumber'
+    -----------------------
+    > transaction hash:    0xfe7f7fede1aba3e42f9b5d878f5e7a7f63ed94280f745d397bdf28d243e704c4
+    > Blocks: 0            Seconds: 12
+    > contract address:    0x77715e313730a64Ff6a7C8430a4dBe1C90c6463e
+    > block number:        75745
+    > block timestamp:     1567521617
+    > account:             0x285f996244AA936E1c54Bcf77d5e253790614Af5
+    > balance:             0.095532
+    > gas used:            114159
+    > gas price:           20 gwei
+    > value sent:          0 ETH
+    > total cost:          0.00228318 ETH
+
+
+    > Saving migration to chain.
+    > Saving artifacts
+    -------------------------------------
+    > Total cost:          0.00228318 ETH
+
+
+  Summary
+  =======
+  > Total deployments:   3
+  > Final cost:          0.01263116 ETH
+  ```
+
+6. Enter the truffle console
+  ```
+  truffle console --network develop;
+  ```
+
+7. Execute HelloWorld.sol smart contract on testnet Ethereum sidechain
+  First, let's see what message is currently set 
+  ```
+  truffle(develop)>var first_contract
+  truffle(develop)>HelloWorld.deployed().then(function(instance) { first_contract = instance; })
+  truffle(develop)> first_contract.message.call()
+  ```
+  Should return
+  ```
+  ''
+  ```
+  This is because the function Hello() hasn't been called yet.
+
+  Let's now call the function to set its value
+  ```
+  truffle(develop)> first_contract.Hello()
+  truffle(develop)> first_contract.message.call()
+  ```
+  Should return
+  ```
+  'Hello World!'
+  ```
+  Success!
+
+8. Execute StoreNumber.sol smart contract on testnet Ethereum sidechain
+  First, let's see what number is currently stored
+  ```
+  truffle(develop)>var second_contract
+  truffle(develop)>StoreNumber.deployed().then(function(instance) { second_contract = instance; })
+  truffle(develop)> second_contract.get()
+  ```
+  Should return
+  ```
+  BN {
+    negative: 0,
+    words: [ 0, <1 empty item> ],
+    length: 1,
+    red: null }
+  ```
+
+  Let's now change the value of this item
+  ```
+  truffle(develop)> second_contract.set(5)
+  truffle(develop)> second_contract.get()
+  ```
+  Now, this should return
+  ```
+  BN {
+    negative: 0,
+    words: [ 5, <1 empty item> ],
+    length: 1,
+    red: null }
+  ```
+  As you can see, we successfully set the value from 0 to 5
