@@ -7,7 +7,11 @@ To go through this, you will need the following:
 1. You are using a Mac/Linux
 2. You have installed docker and docker-compose
 3. You have checked out https://github.com/cyber-republic/elastos-privnet/tree/v0.5 and are on tag v0.5
-7. Catch up on First Developer Workshop on how to run an elastos private net on your local machine if you haven't. Visit [Elastos Developer Workshop #1: Running Private Net](https://www.youtube.com/watch?v=0Mn9pz2UORo) for more info
+4. Catch up on First Developer Workshop on how to run an elastos private net on your local machine if you haven't. Visit [Elastos Developer Workshop #1: Running Private Net](https://www.youtube.com/watch?v=0Mn9pz2UORo) for more info
+5. You have installed NodeJS and NPM
+  ```
+  sudo apt-get install nodejs npm;
+  ```
 
 ## Resources
 - Eth Sidechain Repo: [https://github.com/elastos/Elastos.ELA.SideChain.ETH](https://github.com/elastos/Elastos.ELA.SideChain.ETH)
@@ -18,6 +22,11 @@ To go through this, you will need the following:
 - What is Ethereum Sidechain: [https://developer.elastos.org/discover_elastos/core_modules/ethereum_sidechain/](https://developer.elastos.org/discover_elastos/core_modules/ethereum_sidechain/)
 - Ethereum Sidechain RPC Reference: [https://developer.elastos.org/elastos_blockchain/reference/rpc/ethereum_sidechain/](https://developer.elastos.org/elastos_blockchain/reference/rpc/ethereum_sidechain/)
 - Ethereum Sidechain Smart Contract Guide: [https://developer.elastos.org/elastos_core_services/guides/ethereum_smart_contracts/](https://developer.elastos.org/elastos_core_services/guides/ethereum_smart_contracts/)
+- Eth Sidechain Testnet Wallet: [https://wallet.elaeth.io](https://wallet.elaeth.io)
+- Eth Sidechain Testnet Faucet: [https://faucet.elaeth.io/](https://faucet.elaeth.io/)
+- Eth Sidechain Testnet Explorer: [https://explorer.elaeth.io/](https://explorer.elaeth.io/)
+- Eth Task Force Github Repo: [https://github.com/elaeth](https://github.com/elaeth)
+- Truffle Box: [https://truffle-box.github.io](https://truffle-box.github.io)
 
 ## Contents
 
@@ -52,6 +61,22 @@ To go through this, you will need the following:
    ```
    {"Desc":"Success","Error":0,"Result":"1005.60664465"}
    ```
+
+3. Verify the ETH sidechain is running by checking the preloaded wallet:
+
+  ```
+  curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x4505b967d56f84647eb3a40f7c365f7d87a88bc3", "latest"],"id":1}' localhost:60111
+  ```
+  
+  Should return something like:
+  ```
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": "0x152cf383e51ef1920000"
+  }
+  ```
+  0x152cf383e51ef1920000 is 99998900000000000000000 in decimal format which is the unit in wei. This equals to 99998.9 ETH ELA
 
 ## Intro to Ethereum Sidechain
 - [Ethereum Sidechain on Elastos Developer Portal](https://developer.elastos.org/discover_elastos/core_modules/ethereum_sidechain/)
@@ -108,7 +133,7 @@ To go through this, you will need the following:
 6. Check eth balance:
 
   ```
-  curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x4505b967d56f84647eb3a40f7c365f7d87a88bc3", "latest"],"id":1}' localhost:60011
+  curl -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x4505b967d56f84647eb3a40f7c365f7d87a88bc3", "latest"],"id":1}' localhost:60111
   ```
 
   Should return something like:
@@ -116,19 +141,17 @@ To go through this, you will need the following:
   {
     "jsonrpc": "2.0",
     "id": 1,
-    "result": "0x152cf383e51ef1920000"
+    "result": "0x2a59e707ca3de3240000"
   }
   ```
-  0x152cf383e51ef1920000 is 99998900000000000000000 in decimal format which is the unit in wei. This equals to 99998.9 ETH ELA
+  0x2a59e707ca3de3240000 is 199997800000000000000000 in decimal format which is the unit in wei. This equals to 199997.8 ETH ELA
+
 7. Clean up your environment:
   
   ```
   cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain/ela-mainchain;
   rm -f cli-config.json keystore.dat ready_to_send.txn to_be_signed.txn wallet.db;
-  cd $GOPATH/src/github.com/cyber-republic/elastos-privnet/blockchain;
-  tools/copy_dockerdata_host.sh;
-  cd $GOPATH/src/github.com/cyber-republic/developer-workshop/2019-07-31;
-  git checkout samples/src/main/java/didclientsample/ElaDidServiceApi.java
+  cd $GOPATH/src/github.com/cyber-republic/developer-workshop/2019-09-04;
   ```
 
 ## Interact with Ethereum Sidechain using RPC methods
@@ -154,10 +177,10 @@ To go through this, you will need the following:
   {
     "jsonrpc": "2.0",
     "id": 1,
-    "result": "0x152cf383e51ef1920000"
+    "result": "0x2a59e707ca3de3240000"
   }
   ```
-  0x152cf383e51ef1920000 is 99998900000000000000000 in decimal format which is the unit in Wei. This equals to 99998.9 ETH ELA
+  0x2a59e707ca3de3240000 is 199997800000000000000000 in decimal format which is the unit in wei. This equals to 199997.8 ETH ELA
 3. **eth_getBlockByHash**: Returns information about a block from its hash
   ```
   curl -X POST -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"jsonrpc":"2.0","method":"eth_getBlockByHash","params":["0xb0cd29490c792dbcbe75adadee415270b9e5c8ae89dfed835440f2ac606eebfc", true],"id":1}' http://localhost:60111
@@ -200,7 +223,120 @@ To go through this, you will need the following:
 2. You have access to the management APIs when you run `geth console --testnet`. For more info on what the management APIs are, please refer to [https://github.com/elastos/Elastos.ELA.SideChain.ETH/wiki/Management-APIs](https://github.com/elastos/Elastos.ELA.SideChain.ETH/wiki/Management-APIs)
 
 ## Managing Accounts: Create accounts, import wallets, list accounts and check balances
+NOTE: Currently, there is no way to run a second node and connect that node to your locally running privnet Ethereum sidechain network. The following just utilizes geth program to create accounts, list accounts, etc connected to the testnet.  
+1. Create a new account
+  ```
+  cd bin;
+  ./geth --testnet --datadir elastos_eth account new
+  ```
+  Should return something like 
+  ```
+  INFO [08-28|15:59:43.314] Maximum peer count                       ETH=25 LES=0 total=25
+  Your new account is locked with a password. Please give a password. Do not forget this password.
+  Passphrase: 
+  Repeat passphrase: 
+  lAddress: {285f996244aa936e1c54bcf77d5e253790614af5}
+  ```
+2. Check the newly created account
+  ```
+  ./geth --testnet --datadir elastos_eth account list;
+  ```
+  Should return
+  ```
+  INFO [09-03|08:51:04.632] Maximum peer count                       ETH=25 LES=0 total=25
+  Account #0: {285f996244aa936e1c54bcf77d5e253790614af5} keystore:///home/kpachhai/dev/src/github.com/cyber-republic/developer-workshop/2019-09-04/bin/elastos_eth/keystore/UTC--2019-09-03T12-50-16.360697479Z--285f996244aa936e1c54bcf77d5e253790614af5
+  ```
+  You can check the keystore file at the above location:
+  ```
+  cat elastos_eth/keystore/UTC--2019-09-03T12-50-16.360697479Z--285f996244aa936e1c54bcf77d5e253790614af5
+  ```
+  Should return:
+  ```
+  {
+    "address": "285f996244aa936e1c54bcf77d5e253790614af5",
+    "crypto": {
+      "cipher": "aes-128-ctr",
+      "ciphertext": "05e96f05af56e9e6d1ad6a22deca514ad72f4b5ef41f8dfce8a8e9fbbf4097bc",
+      "cipherparams": {
+        "iv": "62a6c36ee0a3746f46d6d67dd2fda7b7"
+      },
+      "kdf": "scrypt",
+      "kdfparams": {
+        "dklen": 32,
+        "n": 262144,
+        "p": 1,
+        "r": 8,
+        "salt": "e419edef08127c39122ecca7d996b86389acc672832d2721ede9c9bf410ae927"
+      },
+      "mac": "e7c9d7152a51070bfce02b92558996bef6eb3d3d56c1878e39f8ccc533c3c3ce"
+    },
+    "id": "a89aea30-1c6f-4c98-9136-34e1324aa369",
+    "version": 3
+  }
+  ```
+3. Update your account
+  ```
+  ./geth --testnet --datadir elastos_eth account update 285f996244aa936e1c54bcf77d5e253790614af5
+  ```
+  Should return
+  ```
+  Unlocking account 285f996244aa936e1c54bcf77d5e253790614af5 | Attempt 1/3
+  Passphrase: 
+  INFO [08-28|16:16:28.857] Unlocked account                         address=285f996244aa936e1c54bcf77d5e253790614af5
+  Please give a new password. Do not forget this password.
+  Passphrase: 
+  Repeat passphrase: 
+  ```
 
 ## Connect to Ethereum Sidechain testnet
+1. Let's run a local Ethereum Sidechain node that's connected to the testnet
+  ```
+  ./geth --testnet --datadir elastos_eth --ethash.dagdir elastos_ethash --rpc --rpcaddr 0.0.0.0 --rpccorsdomain '*' --rpcport 21636 --rpcapi 'personal,db,eth,net,web3,txpool,miner'
+  ```
+  Note: It may take a while for the blocks to sync to latest height
+
+2. Request some test Eth ELA
+  We're going to use the same Eth ELA address we created earlier for this: 0x285f996244aa936e1c54bcf77d5e253790614af5. Or, you can also create a new Eth ELA wallet for testnet at [https://wallet.elaeth.io](https://wallet.elaeth.io). As this website is in testing phase, it may not work as expected so for this developer workshop, we recommend creating the wallet using the above method instead of the website.
+  Let's check its current balance:
+  ```
+  curl -X POST -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x285f996244aa936e1c54bcf77d5e253790614af5", "latest"],"id":1}' localhost:21636
+  ```
+
+  Should return
+  ```
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": "0x0"
+  }
+  ```
+
+  Now, we're going to request some test ETH ELA. Visit [https://faucet.elaeth.io/](https://faucet.elaeth.io/) and put in your test Eth ELA address and request some test Eth ELA to your newly created address.
+  After a while, check to make sure your address has some Eth ELA in it.
+  ```
+  curl -X POST -H 'Content-Type: application/json' -H 'Accept:application/json' --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x285f996244aa936e1c54bcf77d5e253790614af5", "latest"],"id":1}' localhost:21636
+  ```
+
+  Should return
+  ```
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": "0x16345785d8a0000"
+  }
+  ```
+  0x16345785d8a0000 is 100000000000000000 in decimal format which is the unit in wei. This equals to 0.1 ETH ELA.
+  Note: You can also check the balance for your Eth ELA address for testnet by visiting [https://explorer.elaeth.io/](https://explorer.elaeth.io/)
 
 ## Deploy a simple Ethereum Smart Contract
+1. Install Truffle Box
+  We're going to be using Truffle Box that will help us in deploying our smart contract to our private ethereum sidechain and testnet ethereum 
+  sidechain.
+  ```
+  cd $GOPATH/src/github.com/cyber-republic/developer-workshop/2019-09-04/smart_contracts;
+  npm install -g truffle;
+  ```
+2. Install Solidity Compiler
+  ```
+  npm install -g solc;
+  ```
