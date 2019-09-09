@@ -23,8 +23,6 @@ To go through this, you will need the following:
 9. Create multi-signature wallet using Elephant API
 10. Roadmap for Elephant Wallet 
 
-## Set up your Private Net
-
 
 ## Intro to Elephant Wallet Node and API
 
