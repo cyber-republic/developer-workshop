@@ -12,7 +12,6 @@ To go through this, you will need the following:
 
 ## Contents
 
-0. Set up your Private Net
 1. Intro to Elephant Wallet Node and API
 2. Checking out Elephant Github Repos(Android and iOS)
 3. Build an Elephant Wallet Node
