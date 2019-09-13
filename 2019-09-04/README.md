@@ -26,7 +26,6 @@ To go through this, you will need the following:
 - Eth Sidechain Testnet Wallet: [https://wallet.elaeth.io](https://wallet.elaeth.io)
 - Eth Sidechain Testnet Faucet: [https://faucet.elaeth.io/](https://faucet.elaeth.io/)
 - Eth Sidechain Testnet Explorer: [https://explorer.elaeth.io/](https://explorer.elaeth.io/)
-- Eth Task Force Github Repo: [https://github.com/elaeth](https://github.com/elaeth)
 - Truffle Box: [https://truffle-box.github.io](https://truffle-box.github.io)
 
 ## Contents
