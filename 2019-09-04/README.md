@@ -96,7 +96,7 @@ To go through this, you will need the following:
     ```
     {
       "Host": "127.0.0.1:10014",
-      "DepositAddress":"XZyAtNipJ7fdgBRhdzCoyS7A3PDSzR7u98"
+      "DepositAddress":"XDUhwtY9e1qMsM7sei7kJf53KDE2J8MQEd"
     }
 3. Create a new wallet using ela-cli-crosschain client for testing purposes
 
