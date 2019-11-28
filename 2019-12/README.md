@@ -1,4 +1,4 @@
-# Workshop #6: Ethereum Sidechain Part 2
+# Workshop #5: Ethereum Sidechain Part 2
 
 ## Requirements
 
